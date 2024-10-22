@@ -11,11 +11,11 @@ func newDeck () deck {
 		cards := deck{};
 
 		cardSuits := []string {"Spades", "Diamonds", "Hearts", "Clubs"}
-		cardNums:= []string {"Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Joker", "Queen", "King"}
+		cardNums:= []string {"Ace", "Two", "Three", "Four"}
 
 		for _, suit := range cardSuits {
 			for _, value := range cardNums {
-				cards = append(cards, value + " f "+ suit);
+				cards = append(cards, value + " of "+ suit);
 			}
 		}
 
@@ -26,4 +26,8 @@ func (d deck) print () {
 	for i, card := range(d ){
 		fmt.Println(i, card);
 	}
+}
+
+func deal(d deck, handSize int) (deck, deck) {
+	return d[:handSize], d[handSize:]
 }
