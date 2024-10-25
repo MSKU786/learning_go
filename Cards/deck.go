@@ -1,7 +1,9 @@
 package main
 
-import ("fmt"
- "strings"
+import (
+	"fmt"
+	"os"
+	"strings"
 )
 
 //create a new data type 'deck'
@@ -38,4 +40,8 @@ func deal(d deck, handSize int) (deck, deck) {
 func (d deck) toString () string  {
 		deckString := strings.Join([]string(d), ",");
 		return deckString
+}
+
+func ( d deck) saveToFile (fileName string) error {
+		return os.WriteFile(fileName, []byte(d.toString()), 0666)
 }
