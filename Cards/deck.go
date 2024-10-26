@@ -45,3 +45,15 @@ func (d deck) toString () string  {
 func ( d deck) saveToFile (fileName string) error {
 		return os.WriteFile(fileName, []byte(d.toString()), 0666)
 }
+
+func newDeckFromFile (filename string) {
+		bs, err := os.ReadFile(filename)
+
+		if (err != nil) {
+			fmt.Printf("Error:" , err);
+			os.Exit(1);
+		}
+
+		
+
+}
