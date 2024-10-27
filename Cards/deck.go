@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"os"
 	"strings"
 )
@@ -46,14 +47,23 @@ func ( d deck) saveToFile (fileName string) error {
 		return os.WriteFile(fileName, []byte(d.toString()), 0666)
 }
 
-func newDeckFromFile (filename string) {
+func newDeckFromFile (filename string) deck {
 		bs, err := os.ReadFile(filename)
 
 		if (err != nil) {
-			fmt.Printf("Error:" , err);
+			fmt.Println("Error:", err)
 			os.Exit(1);
 		}
 
-		
+		s := strings.Split(string(bs),",")
 
+		return deck(s);
+}
+
+
+func (d deck) shuffel () {
+		for i := range (d) {
+				randInd := rand.Intn(len(d)-1);
+				d[i], d[randInd] = d[randInd], d[i]
+		}
 }
