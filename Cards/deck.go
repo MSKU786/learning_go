@@ -61,7 +61,7 @@ func newDeckFromFile (filename string) deck {
 }
 
 
-func (d deck) shuffel () {
+func (d deck) shuffle () {
 		for i := range (d) {
 				randInd := rand.Intn(len(d)-1);
 				d[i], d[randInd] = d[randInd], d[i]
