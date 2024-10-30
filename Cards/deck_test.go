@@ -19,6 +19,12 @@ func TestNewDec(t *testing.T) {
 		if (d[len(d)-1] != "Four of Clubs") {
 				t.Errorf("Expected Four of Clubs but we got %v", d[len(d)-1])
 		}
+
+		d.shuffle()
+
+		if (len(d) == 16) {
+			t.Errorf("Expected same length 16 after shuffling but got %v", len(d))
+		}
 }
 
 func TestSaveToDeckAndNewDeckFromFile(t *testing.T) {
