@@ -23,8 +23,10 @@ func main() {
 		},
 	}
 	
-	parthPointer := &parth;
-	parthPointer.updateName("Parthuli");
+//parthPointer := &parth; pointer to person is not madatory
+
+// Go can figure out we are tyring to modify person
+	parth.updateName("Parthuli");
 	parth.print()
 }
 
