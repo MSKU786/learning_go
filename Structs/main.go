@@ -35,5 +35,5 @@ func (p person ) print () {
 }
 
 func (personToPointer *person) updateName(newFirstName string) {
-	*&personToPointer.firstName = newFirstName;
+	(*personToPointer).firstName = newFirstName;
 }
