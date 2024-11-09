@@ -16,5 +16,12 @@ func main() {
 
 	fmt.Println(resp);
 
+	//Reading data through the reader interface and read function
+
+	bs := make([]byte, 99999)
+
+	resp.Body.Read(bs);
+
+	fmt.Println(string(bs))
 
 }
