@@ -7,6 +7,8 @@ import (
 	"os"
 )
 
+type logWritter  struct{}
+
 func main() {
 	resp, err := http.Get("https://www.google.com")
 
@@ -26,6 +28,20 @@ func main() {
 
 	fmt.Println(string(bs))
 
+	lw := logWritter{};
+
 	//Using wirte  2nd way to use io copy function to use write interface interally
 	io.Copy(os.Stdout, resp.Body);
+
+	io.Copy(lw, resp.Body);
+}
+
+
+
+//Customer writer
+
+func (logWritter) Write (bs []byte) (int , error) {
+		fmt.Println(string(bs));
+		fmt.Println("just wrote this many bytes", len(bs))
+		return len(bs), nil;
 }
