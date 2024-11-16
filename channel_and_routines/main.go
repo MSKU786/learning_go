@@ -19,8 +19,8 @@ func main() {
 			go checkLink(l, c);
 	}
 
-	for {
-			go checkLink(<-c, c);
+	for l := range(c) {
+			go checkLink(l, c);
 	}
 }
 
