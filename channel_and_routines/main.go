@@ -8,8 +8,8 @@ import (
 func main() {
 	links := []string {
 		"http://google.com",
-		"http://facebook.com",
-		"http://amazon.com",
+		"http://facebook.in",
+		"http://amazon.in",
 		"http://stackoverflow.com",
 	}
 
@@ -17,6 +17,10 @@ func main() {
 
 	for _,l := range(links) {
 			go checkLink(l, c);
+	}
+
+	for i:=0; i<len(links); i++ {
+		fmt.Println(<-c)
 	}
 }
 
