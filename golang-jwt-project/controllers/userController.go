@@ -13,10 +13,38 @@ import (
 	"github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"golang.org/x/crypto/bcrypt"
 )
 
 var userCollection *mongo.Collection = database.OpenCollection(database.Client, "users")
 var validate = validator.New()
+
+func HashPassword(password string) string {
+		bcrypt.GenerateFromPassword([] byte(password), 14)
+
+		if err != nil {
+			log.Panic(err)
+		}	
+			
+		return string(byt )
+
+
+}
+
+
+func VerifyPassword(userPassword string, providePassword string)(bool string) {
+		err := bcrypt.CompareHashAndPassword([]byte(userPassword), []byte(providePassword))
+		check := true
+		msg := ""
+
+		if err != nil {	
+			msg = "Password does not match"
+			check = false
+		}	
+
+		return check, msg;
+	}
+
 
 func Singup() gin.HandlerFunc{
 		return func(c *gin.Context) {
