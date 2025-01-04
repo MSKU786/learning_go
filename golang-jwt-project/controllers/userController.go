@@ -112,6 +112,7 @@ func Login() ginHandler {
 	return func(c *gin.Context) { 
 			ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)	;
 			var user models.User;
+			var foundUser models.User;
 			if err := c.BindJSON(&user); err != nil {
 				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 				return
@@ -122,20 +123,35 @@ func Login() ginHandler {
 				return
 			}	
 
-			count, err :- userCollection.CountDocuments(ctx, bson.M{"email": user.Email});
+			err :- userCollection.FindOne(ctx, bson.M{"email": user.Email}).Decode(&foundUser);
 
 			if err != nil {
 				log.Panic(err);
-				c.JSON(http.StatusInternalServerError, gin.H{"error": "An error occured while checking for the user"})
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Email or password is incorrect"})
 				return
 			}
 
-			if count == 0 {	
-				c.JSON(http.StatusBadRequest, gin.H{"error": "User not found"})
-				return
-			}	
+			passwordIsValid, msg := VerifyPassword(*user.Password, *foundUser.Password);
+			defer cancel()
 
-			var result models.User;
+			if (passwordIsValid != true) {
+				c.JSON(http.internalServerError, gin.H{"error": msg})	
+				return
+			}
+
+			token, refreshToken, _  := helpers.GenerateAllTokens(*foundUser.Email, *foundUser.First_Name, *foundUser.Last_Name, *foundUser.User_Type, *foundUser.UserId)
+
+			err := userCollection.FindOne(ctx, bson.M{"user_id": foundUser.User_id}).Decode(&foundUser) 
+			defer cancel()
+
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "User not found"})
+				return
+			}
+
+			 
+			c.JSON(http.StatusOK, foundUser)
+
 	}
 }
 
@@ -163,6 +179,7 @@ func GetUser() gin.HandlerFunc {
 				return
 			}
 
+			 
 			c.JSON(http.StatusOK, user)
 	}
 }
