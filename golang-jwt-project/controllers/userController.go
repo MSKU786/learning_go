@@ -20,15 +20,13 @@ var userCollection *mongo.Collection = database.OpenCollection(database.Client, 
 var validate = validator.New()
 
 func HashPassword(password string) string {
-		bcrypt.GenerateFromPassword([] byte(password), 14)
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 
 		if err != nil {
 			log.Panic(err)
 		}	
 			
-		return string(byt )
-
-
+		return string(bytes)
 }
 
 
