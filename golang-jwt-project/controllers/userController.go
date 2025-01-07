@@ -183,12 +183,33 @@ func GetUsers() gin.HandlerFunc{
 
 
 			matchStage := bson.D{{Key: "$match", Value: bson.D{{}}}};
-			groupStage := bson.D{{Key: "$group", Value: bson.D{{Key: "_id", Value: nil}, {Key: "total", Value: bson.D{{Key: "$sum", Value: 1}}}}}};
+			groupStage := bson.D{{Key: "$group", Value: bson.D{
+				{Key: "_id", Value: bson.D{{Key: "_id", Value: "null"}}}, 
+				{Key: "total", Value: bson.D{{Key: "$sum", Value: 1}}}, 
+				{Key: "data", Value: bson.D{{Key: "$push", Value: "$$ROOT"}}},
+			}}};
+			projectStage := bson.D{
+				{Key: "$project", Value: bson.D{
+					{Key: "_id", Value: 0},
+					{Key: "total", Value: 1},
+					{Key: "user_items", Value: bson.D{{Key: "$slice", Value: []interface{}{"$data", startIndex, recordPerPage}}}},
+				},
+			}}
 			
-			var users []models.User;
-			userCollection.Find({}, bson.M{}).Decode(&users);
+			results , err := userCollection.Aggregate(ctx, mongo.Pipeline{matchStage, groupStage, projectStage});
 			defer cancel();
-			c.JSON(http.StatusOK, users);
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Error occured while fetching users"})
+				return
+			}
+
+			var allUsers []bson.M;
+
+			if err = results.All(ctx, &allUsers); err != nil {
+				log.Fatal(err);
+		
+			}
+			c.JSON(http.StatusOK, allUsers[0]);
 
 		}
 }
