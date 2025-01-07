@@ -6,6 +6,8 @@ import (
 	"golang-jwt-project/models"
 	"log"
 	"net/http"
+	"os/user"
+	"strconv"
 
 	"golang-jwt-project/helpers"
 
@@ -155,8 +157,40 @@ func Login() ginHandler {
 	}
 }
 
-func GetUsers() {
+func GetUsers() gin.HandlerFunc{
+		return func(c *gin.Context) {
+			err := helpers.CheckUserType(c, "ADMIN"); 
+			if err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				return;
+			}
 
+			var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second);
+
+			recordPerPage, err := strconv.Atomic.query("recordPerPage")
+			if err != nil || recordPerPage < 1 {
+				recordPerPage = 10
+			}
+
+			page, err1 := strconv.Atomic.query("page")
+
+			if err1 != nil || page < 1 {
+				page = 1
+			}
+			
+			startIndex := (page - 1) * recordPerPage;
+			startIndex, err = strconv.Atoi(c.Query("startIndex"));
+
+
+			matchStage := bson.D{{Key: "$match", Value: bson.D{{}}}};
+			groupStage := bson.D{{Key: "$group", Value: bson.D{{Key: "_id", Value: nil}, {Key: "total", Value: bson.D{{Key: "$sum", Value: 1}}}}}};
+			
+			var users []models.User;
+			userCollection.Find({}, bson.M{}).Decode(&users);
+			defer cancel();
+			c.JSON(http.StatusOK, users);
+
+		}
 }
 
 func GetUser() gin.HandlerFunc {
