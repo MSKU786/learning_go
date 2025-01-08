@@ -66,9 +66,9 @@ func UpdateAllTokens(signedToken string, signedRefreshToken string, userId strin
 	
 	var updateObj primitive.D
 
-	updateObj = append(updateObj, bson.E{"token", signedToke});
-	updateObj = append(updateObj, bson.E{"refresh_token", signedRefreshToke});
-	updateObj = append(updateObj, bson.E{"updated_at", time.Now().Local()});
+	updateObj = append(updateObj, bson.E{Key: "token", Value: signedToken});
+	updateObj = append(updateObj, bson.E{Key: "refresh_token", Value: signedRefreshToken});
+	updateObj = append(updateObj, bson.E{Key: "updated_at", Value: time.Now().Local()});
 
 	upsert := true
 	filter := bson.M{"user_id": userId}
@@ -76,7 +76,9 @@ func UpdateAllTokens(signedToken string, signedRefreshToken string, userId strin
 		Upsert: &upsert,
 	}
 
-	_, err := userCollection.UpdateOne(ctx, filter, bson.D{{"$set", updateObj}}, &opt);
+	defer cancel();
+
+	_, err := userCollection.UpdateOne(ctx, filter, bson.D{{Key: "$set", Value: updateObj}}, &opt);
 
 	if (err != nil) {
 		log.Panic(err)
