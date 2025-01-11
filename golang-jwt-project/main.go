@@ -29,5 +29,5 @@ func main() {
 				c.JSON(200, gin.H("Success", "Access granted for API v2"))
 		})
 
-		router.Run(":" port);
+		router.Run(":", port);
 }

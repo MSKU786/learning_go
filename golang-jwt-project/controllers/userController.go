@@ -46,7 +46,7 @@ func VerifyPassword(userPassword string, providePassword string)(bool string) {
 	}
 
 
-func Singup() gin.HandlerFunc{
+func SignUp() gin.HandlerFunc{
 		return func(c *gin.Context) {
 			var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 			var user models.User
@@ -110,7 +110,7 @@ func Singup() gin.HandlerFunc{
 		}  
 }
 
-func Login() ginHandler {
+func Login() gin.HandlerFunc {
 	return func(c *gin.Context) { 
 			ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)	;
 			var user models.User;

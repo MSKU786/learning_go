@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"fmt"
 	"golang-jwt-project/helpers"
 	"net/http"
 
@@ -9,18 +8,18 @@ import (
 )
 
 func AuthMiddleware() gin.HandlerFunc {
-		return func(c * gin.Context) {
+		return func(c *gin.Context) {
 			clientToken := c.Request.Header.Get("token")
 			if clientToken == "" {
-				c.JSON(http.StatusInternalServerError, gin.H{"error", fmt.Sprintf("No authorization header found")})
-				c.abort()
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "No authorization header found"})
+				c.Abort()
 				return;
 			}
 
 			claims, err := helpers.ValidateToken(clientToken)	//validate the token
 			if err != "" {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": err})
-				c.abort()
+				c.Abort()
 				return;
 			}
 
@@ -30,6 +29,6 @@ func AuthMiddleware() gin.HandlerFunc {
 			c.Set("last_name", claims.Last_Name);
 			c.Set("user_type", claims.User_Type);
 			c.Next();
-			
+
 		}
 }
