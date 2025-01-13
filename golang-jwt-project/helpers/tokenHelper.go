@@ -1,17 +1,19 @@
 package helpers
 
 import (
-	"fmt"
 	"context"
+	"fmt"
 	"golang-jwt-project/database"
 	"log"
 	"os"
 	"time"
+
 	jwt "github.com/dgrijalva/jwt-go"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"golang.org/x/crypto/bcrypt"
 )
 
 
@@ -28,7 +30,7 @@ var userCollection *mongo.Collection = database.OpenCollection(database.Client, 
 var SECRET_KEY string = os.Getenv("SECRET_KEY")
 
 
-func GenerateAllTokens(email string, firstName string, lastName string, userType string, userId string) (string, string) {
+func GenerateAllTokens(email string, firstName string, lastName string, userType string, userId string) (string, string, error) {
 	var err error
 	//Creating Access Token
 	claims := &SignedDetails{
@@ -53,7 +55,7 @@ func GenerateAllTokens(email string, firstName string, lastName string, userType
 
 	if err != nil {
 		log.Panic(err);
-		return "", ""
+		return "", "", err;
 	}
 
 	return token, refreshToken, err;
@@ -118,4 +120,14 @@ func ValidateToken(signedToken string) (claims *SignedDetails, msg string) {
 	}
 
 	return claims, msg;
+}
+
+func HashPassword(password string) string {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+
+		if err != nil {
+			log.Panic(err)
+		}	
+			
+		return string(bytes)
 }

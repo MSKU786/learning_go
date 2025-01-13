@@ -17,6 +17,6 @@ type User struct{
 	User_Type				*string										`json:"user_type" validate:"required, eq=ADMIN|eq=USER"`
 	Refresh_token		*string										`json:"refresh_token"`
 	Created_at			time.Time									`json:"credated_at"`
-	Updated_at			time.Time									`json:"credated_at"`
+	Updated_at			time.Time									`json:"updated_at"`
 	User_id					string										`json:"user_id"`
 }
