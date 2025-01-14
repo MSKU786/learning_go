@@ -78,7 +78,8 @@ func SignUp() gin.HandlerFunc{
 				return
 			}
 
-			user.Password = helpers.HashPassword(user.Password);
+			hashedPassword := helpers.HashPassword(*user.Password)
+			user.Password = &hashedPassword
 			user.Created_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 			user.Updated_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 			user.ID = primitive.NewObjectID()
@@ -132,7 +133,8 @@ func Login() gin.HandlerFunc {
 			}
 
 			token, refreshToken, _  := helpers.GenerateAllTokens(*foundUser.Email, *foundUser.First_Name, *foundUser.Last_Name, *foundUser.User_Type, *&foundUser.User_id)
-
+			foundUser.Token = &token
+			foundUser.Refresh_token = &refreshToken
 			err = userCollection.FindOne(ctx, bson.M{"user_id": foundUser.User_id}).Decode(&foundUser) 
 			defer cancel()
 
@@ -208,7 +210,6 @@ func GetUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
 			userId := c.Param("user_id")
 			if err := helpers.MatchUserByUid(c, userId); err != nil {
-			if err := helpers.MatchUserByUid(c, userId); err != nil {
 				c.JSON(http.StatusBadRequest, gin.H{"error":err.Error()})
 				return
 			}
@@ -223,9 +224,7 @@ func GetUser() gin.HandlerFunc {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "User not found"})
 				return;
 			}
-
-		}
 		
-		c.JSON(http.StatusOK, user)
+			c.JSON(http.StatusOK, user)
 	}
 }
