@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"context"
-	"golang-jwt-project/database"
+	database "golang-jwt-project/database"
 	"golang-jwt-project/models"
 	"log"
 	"net/http"
@@ -78,7 +78,7 @@ func SignUp() gin.HandlerFunc{
 				return
 			}
 
-			user.Password, _ = helpers.HashPassword(*user.Password);
+			user.Password = helpers.HashPassword(user.Password);
 			user.Created_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 			user.Updated_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 			user.ID = primitive.NewObjectID()
