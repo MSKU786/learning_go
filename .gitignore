@@ -1,0 +1,23 @@
+# Ignore Go build artifacts for all projects
+*.exe
+*.dll
+*.so
+*.dylib
+*.out
+*.o
+*.a
+
+# Ignore vendor directories in all projects
+vendor/
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+*.temp
+
+# Ignore IDE/editor-specific files for all projects
+.idea/
+.vscode/
+
+*/.env
+golang-jwt-project/.env
