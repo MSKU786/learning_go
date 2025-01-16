@@ -13,13 +13,14 @@ import (
 )
 
 func DBInstance() *mongo.Client{
-    err := godotenv.Load("env")
+    err := godotenv.Load()
 
     if (err != nil) {
-      log.Fatal("Error loading the dotenv file")
+      
+      log.Fatal("Error loading the dotenv file", err)
     }
 
-    MongoDB := os.Getenv("MONGODB_URL")
+    MongoDB := os.Getenv("DB_HOST")
 
     client, err := mongo.NewClient(options.Client( ).ApplyURI(MongoDB))
 

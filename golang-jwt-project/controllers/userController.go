@@ -42,11 +42,13 @@ func SignUp() gin.HandlerFunc{
 			var user models.User
 			if err := c.BindJSON(&user); err != nil {
 				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				defer cancel();
 				return
 			}
 
 			if err := validate.Struct(user); err != nil {
 				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				defer cancel();
 				return
 			}
 
@@ -108,11 +110,13 @@ func Login() gin.HandlerFunc {
 			var foundUser models.User;
 			if err := c.BindJSON(&user); err != nil {
 				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				defer cancel();
 				return
 			}	
 
 			if err := validate.Struct(user); err != nil {	
 				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				defer cancel();
 				return
 			}	
 
