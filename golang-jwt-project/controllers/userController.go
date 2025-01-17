@@ -24,6 +24,8 @@ var validate = validator.New()
 
 
 func VerifyPassword(userPassword string, providePassword string)(bool , string) {
+
+		println(userPassword, providePassword);
 		err := bcrypt.CompareHashAndPassword([]byte(userPassword), []byte(providePassword))
 		check := true
 		msg := ""
@@ -114,11 +116,11 @@ func Login() gin.HandlerFunc {
 				return
 			}	
 
-			if err := validate.Struct(user); err != nil {	
-				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-				defer cancel();
-				return
-			}	
+			// if err := validate.Struct(user); err != nil {	
+			// 	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			// 	defer cancel();
+			// 	return
+			// }	
 
 			err := userCollection.FindOne(ctx, bson.M{"email": user.Email}).Decode(&foundUser);
 
@@ -128,10 +130,12 @@ func Login() gin.HandlerFunc {
 				return
 			}
 
+			hash := helpers.HashPassword(*user.Password);
+			print(hash, *foundUser.Password);
 			passwordIsValid, msg := VerifyPassword(*user.Password, *foundUser.Password);
 			defer cancel()
 
-			if (passwordIsValid != true) {
+			if !passwordIsValid {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": msg})	
 				return
 			}

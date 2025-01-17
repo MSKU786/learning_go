@@ -124,7 +124,6 @@ func ValidateToken(signedToken string) (claims *SignedDetails, msg string) {
 
 func HashPassword(password string) string {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
-
 		if err != nil {
 			log.Panic(err)
 		}	
