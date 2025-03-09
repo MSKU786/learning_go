@@ -35,4 +35,9 @@ func main() {
 	you scored 223.334000 points
 	you scored 223.3 points
 */
+
+
+	//Sprintf => Save formatted string
+	var str = fmt.Sprintf("My age is %v and my name is %v", age, name);
+	fmt.Println("This is my saved string:", str);
 }
