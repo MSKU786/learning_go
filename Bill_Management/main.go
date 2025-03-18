@@ -4,16 +4,6 @@ import (
 	"fmt"
 )
 
-type Item struct{
-	name string
-	amount float32
-}
-
-type Bill struct {
-	bill_name string
-	items Item
-}
-
 func main() {
 	var bill_name string;
 	fmt.Printf("Create a bill name:");
