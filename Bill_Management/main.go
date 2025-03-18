@@ -25,15 +25,19 @@ func main() {
 }
 
 func addItem() {
-	while(1) {
+	for (true) {
 		var option string;
 		var option_picked string;
 		fmt.Printf("Choose option (a - add item, s - save bill, t - add tip) : ")
 		fmt.Scanln(&option_picked);
 	
 		switch(option_picked) {
-			case 'a' : 
-				option = 'add item'
+			case "a" : 
+				option = "add item";
+		case "s" :
+				option = "save bill";
+		case "t":
+				option = "add tip";
 		}
 	}
 }

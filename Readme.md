@@ -19,3 +19,7 @@ Note: No need to pass as pointer
 - go.mod is critical for defining your project's dependencies.
 - go.sum ensures the dependencies are downloaded correctly and consistently.
 - Do not remove them unless absolutely necessary and you know what you're doing. If you’re troubleshooting, regenerate them using go mod tidy.
+
+### Go is a Pass-by-language
+
+- Go makes "copies" of values when passed into functions
