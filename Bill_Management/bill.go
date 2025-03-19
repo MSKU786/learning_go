@@ -20,9 +20,9 @@ func newBill(name string) bill {
 	return b
 }
 
-// Format the bill
 
-func (b bill) format() string {
+// Format the bill (reciever function)
+func (b *bill) format() string {
 	fs := "Bill breakdown: \n"
 	total := 0.0
 
@@ -35,4 +35,16 @@ func (b bill) format() string {
 	// Total
 	fs += fmt.Sprintf("-25v ...$%0.2f", "Total:", total);
 	return fs;
+}
+
+// UPdate tip
+func (b *bill) updateTip(tip float64) {
+	// Go will automatically resolved this we don't have mention specifically (*b).tip = tip. 
+	// Struct and pionters are automaticlaly derefernce
+	b.tip = tip;
+}
+
+// Add an item to the bill
+func (b *bill) addItem(name string, price float64) {
+	b.items[name] = price;
 }
