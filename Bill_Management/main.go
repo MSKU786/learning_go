@@ -1,33 +1,45 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
+	"strings"
 )
 
 func main() {
-	var bill_name string;
-	fmt.Printf("Create a bill name:");
-	fmt.Scanln(&bill_name)
-	fmt.Printf("Create the bill - %v", bill_name );
+	mybill := createBill();
 
-
-
+	fmt.Println(mybill);
+	
 }
 
-func addItem() {
-	for (true) {
-		var option string;
-		var option_picked string;
-		fmt.Printf("Choose option (a - add item, s - save bill, t - add tip) : ")
-		fmt.Scanln(&option_picked);
-	
-		switch(option_picked) {
-			case "a" : 
-				option = "add item";
-		case "s" :
-				option = "save bill";
-		case "t":
-				option = "add tip";
-		}
-	}
+func createBill()  bill  {
+	reader := bufio.NewReader(os.Stdin);
+
+	// fmt.Print("Crate a bill name: ");
+	// name, _ := reader.ReadString('\n');
+	// name = strings.TrimSpace(name)
+
+	name,_ := getInput("Create a bill name: ", reader);
+	b := newBill(name);
+	fmt.Println("Created the bill - ", b.name);
+
+	return b;
+}
+
+func promptOptions(b bill) {
+	reader := bufio.NewReader(os.Stdin);
+
+	opt, _ := getInput("Choose option (a - add Item, s - save bill, t - add tip): ", reader);
+	fmt.Println(opt);
+}
+
+func getInput(prompt string, r *bufio.Reader) (string, error) {
+	fmt.Print(prompt);
+
+	input, err := r.ReadString('\n');
+	input = strings.TrimSpace(input);
+
+	return input, err;
 }
