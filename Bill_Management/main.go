@@ -25,7 +25,7 @@ func createBill()  bill  {
 	name,_ := getInput("Create a bill name: ", reader);
 	b := newBill(name);
 	fmt.Println("Created the bill - ", b.name);
-
+	promptOptions(b);
 	return b;
 }
 
@@ -48,7 +48,8 @@ func promptOptions(b bill) {
 				fmt.Println("Item added - ", name, p)
 				promptOptions(b);
 		case "s" : 
-				fmt.Println("you choose to save bill", b)
+				b.saveBill();
+				fmt.Println("you saved the bill in file", b.name);
 		case "t" : 
 				tip, _ := getInput("Tip ... ", reader);
 				t, err := strconv.ParseFloat(tip, 64);
